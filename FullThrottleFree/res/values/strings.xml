@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Application Name -->
+    <string name="app_name">Full Throttle Free</string>
+
+    <!-- Name in Live Wallpaper Picker list -->
+    <string name="lwp_name">Full Throttle Free</string>
+
+    <!-- Description in Live Wallpaper Picker list -->
+    <string name="lwp_desc">Fly through a beautiful cityscape in your custom mechanical battle bot</string>
+
+    <!-- Author -->
+    <string name="lwp_author">BD Corps</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+	<string name="chooser_label">Select a file</string>
+	<string name="mute">Mute movie</string>
+	<string name="mute_enabled">Mute enabled</string>
+	<string name="mute_disabled">Mute disabled</string>
+	<string name="settingText">Setting</string>
+	<string name="RoboID">roboID</string>
+	<string name="RoboText">Robo Vehicle</string>
+	
+
+</resources>

@@ -1,28 +1,15 @@
 package com.bdcorps.fullthrottlefree;
 
-import java.util.ArrayList;
 import rajawali.wallpaper.Wallpaper;
-import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.MultiSelectListPreference;
-import android.preference.Preference;
-import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
-import android.util.AttributeSet;
-import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewManager;
-import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
+
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 
 @SuppressWarnings("deprecation")
 public class Settings extends PreferenceActivity implements
@@ -31,6 +18,8 @@ public class Settings extends PreferenceActivity implements
 	SharedPreferences preferences;
 	SharedPreferences.Editor editor;
 
+	 private InterstitialAd interstitial;
+	 
 	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
@@ -39,10 +28,30 @@ public class Settings extends PreferenceActivity implements
 		addPreferencesFromResource(R.xml.settings);
 		preferences = PreferenceManager
 				.getDefaultSharedPreferences(getBaseContext());
-				
+						
 		getPreferenceManager().getSharedPreferences()
 				.registerOnSharedPreferenceChangeListener(this);
-	}
+		
+		
+		// Admob Interstitial
+		interstitial = new InterstitialAd(this);
+		  interstitial.setAdUnitId("ca-app-pub-1049137905806014/8891643282");
+
+		  AdRequest adRequest = new AdRequest.Builder().build();
+		  interstitial.loadAd(adRequest);
+		  interstitial.setAdListener(new AdListener() {
+		      public void onAdLoaded() {
+		          displayInterstitial();
+		      }
+		  });
+		  }
+
+		  public void displayInterstitial() {
+		  if (interstitial.isLoaded()) {
+		      interstitial.show();
+		  }
+		  }
+	
 
 	@Override
 	protected void onResume() {

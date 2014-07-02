@@ -3,6 +3,8 @@
 	<name>FullThrottleFree</name>
 	<comment></comment>
 	<projects>
+		<project>google-play-services_lib</project>
+		<project>Rajawali</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

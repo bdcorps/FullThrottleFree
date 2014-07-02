@@ -2,4 +2,4 @@
     android:author="@string/lwp_author"
     android:description="@string/lwp_desc"
     android:settingsActivity="com.bdcorps.fullthrottlefree.Settings"
-    android:thumbnail="@drawable/icon" />
+    android:thumbnail="@drawable/ic_launcher" />

@@ -36,41 +36,39 @@ public class Renderer extends RajawaliRenderer implements
 		SharedPreferences.OnSharedPreferenceChangeListener, SensorEventListener {
 
 	public static final String SHARED_PREFS_NAME = "rajawalisharedprefs";
-	private SharedPreferences sp;
+	public SharedPreferences sp;
 	public MediaPlayer mMediaPlayer;
 	public VideoTexture mVideoTexture;
 	public Material mVideo;
 	public Plane pVideo;
 
-	AlphaMapTexture a ;
-	
-	public Plane pHUD_1;
-	public Plane pBack_1;
-	public Material mHUD_1;
-	public Material mBack_1;
-	public Bitmap bHUD_1;
-	public Bitmap bBack_1;
-	Plane pHUD_2;
-	public Material mHUD_2;
-	public Bitmap bHUD_2;
+public Plane pCross_1;
+	public Bitmap bCross_1;
+	public Material mCross_1;
+	public Texture tCross_1;
+
+	public Plane pPit_1;
+	public Material mPit_1;
+	public Bitmap bPit_1;
+	public Texture tPit_1;
+
+	public Plane pPit_2;
+	public Material mPit_2;
+	public Bitmap bPit_2;
+	public Texture tPit_2;
+
+	Plane pLaser;
+	public Material mLaser;
+	public Texture tLaser;
+	public Bitmap bLaser;
 
 	Plane pHUD_3;
 	public Material mHUD_3;
 	public Bitmap bHUD_3;
 
-	Plane pLaser;
-	public Material mLaser;
-	public Texture bLaser;
-
 	public boolean mInit;
-	public boolean mInit1;
 
-	public MediaPlayer mMediaPlayer1;
-	public VideoTexture mVideoTexture1;
-	public Material mVideo1;
-	public Plane pVideo1;
-
-	public final float FILTERING_FACTOR = .3f;
+	public final float FILTERING_FACTOR = .11f;
 
 	public SensorManager mSensorManager;
 	public Sensor mAccelerometer;
@@ -79,7 +77,7 @@ public class Renderer extends RajawaliRenderer implements
 	public float mGravity[];
 
 	public String tag = "StripedLog";
-	private float mWidthPlane;
+	public float mWidthPlane;
 
 	public enum ModeRenderer {
 		CLASSIC, LETTER_BOXED, STRETCHED
@@ -87,9 +85,6 @@ public class Renderer extends RajawaliRenderer implements
 
 	public Renderer(Context context) {
 		super(context);
-
-		sp = context.getSharedPreferences(Wallpaper.SHARED_PREFS_NAME,
-				Context.MODE_PRIVATE);
 	}
 
 	@SuppressLint("NewApi")
@@ -104,8 +99,7 @@ public class Renderer extends RajawaliRenderer implements
 
 		mAccVals = new Vector3();
 		mInit = true;
-		mInit1 = true;
-		//setFrameRate(60);
+		// setFrameRate(60);
 		Camera2D cam = new Camera2D();
 		this.replaceAndSwitchCamera(getCurrentCamera(), cam);
 		getCurrentScene().setBackgroundColor(Color.WHITE);
@@ -131,83 +125,54 @@ public class Renderer extends RajawaliRenderer implements
 		pVideo.setPosition(0f, 0f, 0f);
 		addChild(pVideo);
 
-		mMediaPlayer1 = new MediaPlayer();
+		pCross_1 = new Plane(0.25f, 0.25f, 1, 1);
+		pCross_1.setRotY(180);
 
-		mVideoTexture1 = new VideoTexture("VideoLiveWallpaper1", mMediaPlayer1);
-		mVideo1 = new Material();
-		mVideo1.setColorInfluence(0);
+		mCross_1 = new Material();
+
+		mCross_1.setColorInfluence(0);
+		bCross_1 = BitmapFactory.decodeResource(mContext.getResources(),
+				R.drawable.hair_01);
+		tCross_1 = new Texture("bCross_1", bCross_1);
 		try {
-			mVideo1.addTexture(mVideoTexture1);
-		} catch (TextureException e) {
-			e.printStackTrace();
-		}
-
-		pVideo1 = new Plane(1f, 1f, 1, 1);
-		pVideo1.setRotY(180);
-		initVideo1();
-		initPlane(pVideo1, mMediaPlayer1.getVideoWidth(),
-				mMediaPlayer1.getVideoHeight());
-
-		pVideo1.setMaterial(mVideo1);
-		pVideo1.setPosition(0f, 0f, 1f);
-		
-		a = new AlphaMapTexture("pitAlpha", R.raw.pit_1_vid_alpha);
-		
-		try {
-			mVideo1.addTexture(a);
-		} catch (TextureException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		addChild(pVideo1);
-
-		pHUD_1 = new Plane(0.25f, 0.25f, 1, 1);
-		pHUD_1.setRotY(180);
-
-		mHUD_1 = new Material();
-
-		mHUD_1.setColorInfluence(0);
-		bHUD_1 = BitmapFactory.decodeResource(mContext.getResources(),
-				R.drawable.ring_middle);
-		try {
-			mHUD_1.addTexture(new Texture("bHUD_1", bHUD_1));
+			mCross_1.addTexture(tCross_1);
 
 		} catch (TextureException e) {
 			e.printStackTrace();
 		}
 
-		pHUD_1.setMaterial(mHUD_1);
-		pHUD_1.setPosition(0f, 0f, 1f);
-		pHUD_1.setTransparent(true);
+		pCross_1.setMaterial(mCross_1);
+		pCross_1.setPosition(0f, 0f, 1f);
+		pCross_1.setTransparent(true);
 
-		initPlane(pHUD_1, bHUD_1.getWidth(), bHUD_1.getHeight());
-		addChild(pHUD_1);
+		initPlane(pCross_1, bCross_1.getWidth(), bCross_1.getHeight());
+		addChild(pCross_1);
 
-		pHUD_2 = new Plane(1, 1, 1, 1);
-		pHUD_2.setRotY(180);
+		pLaser = new Plane(1, 1, 1, 1);
+		pLaser.setRotY(180);
 
-		mHUD_2 = new Material();
+		mLaser = new Material();
 
-		mHUD_2.setColorInfluence(0);
-		bHUD_2 = BitmapFactory.decodeResource(mContext.getResources(),
+		mLaser.setColorInfluence(0);
+		bLaser = BitmapFactory.decodeResource(mContext.getResources(),
 				R.drawable.laser_01);
+		tLaser=new Texture("bLaser", bLaser);
 		try {
-			mHUD_2.addTexture(new Texture("bHUD_2", bHUD_2));
+			mLaser.addTexture(tLaser);
 
 		} catch (TextureException e) {
 			e.printStackTrace();
 		}
 
-		pHUD_2.setMaterial(mHUD_2);
-		pHUD_2.setPosition(0f, -0.5f, 0.5f);
-		pHUD_2.setTransparent(true);
-		pHUD_2.setVisible(false);
+		pLaser.setMaterial(mLaser);
+		pLaser.setPosition(0f, -0.5f, 0.5f);
+		pLaser.setTransparent(true);
+		pLaser.setVisible(false);
 
-		initPlane(pHUD_2, bHUD_2.getWidth(), bHUD_2.getHeight());
-		addChild(pHUD_2);
+		initPlane(pLaser, bLaser.getWidth(), bLaser.getHeight());
+		addChild(pLaser);
 
-		pHUD_3 = new Plane(1,1, 1, 1);
+		pHUD_3 = new Plane(1, 1, 1, 1);
 		pHUD_3.setRotY(180);
 
 		mHUD_3 = new Material();
@@ -230,45 +195,53 @@ public class Renderer extends RajawaliRenderer implements
 		initPlane(pHUD_3, bHUD_3.getWidth(), bHUD_3.getHeight());
 		addChild(pHUD_3);
 
-		/*pBack_1 = new Plane(1f, 1f, 1, 1);
-		pBack_1.setRotY(180);
+		pPit_1 = new Plane(1, 1, 1, 1);
+		pPit_1.setRotY(180);
+		pPit_1.setTransparent(true);
 
-		mBack_1 = new Material();
+		mPit_1 = new Material();
 
-		mBack_1.setColorInfluence(0);
-		bBack_1 = BitmapFactory
-				.decodeResource(mContext.getResources(), R.raw.a);
+		mPit_1.setColorInfluence(0);
+		bPit_1 = BitmapFactory.decodeResource(mContext.getResources(),
+				R.raw.pit_1_base);
+
+		tPit_1 = new Texture("bPit_1", bPit_1);
 		try {
-			mBack_1.addTexture(new Texture("bBack_1", bBack_1));
+			mPit_1.addTexture(tPit_1);
 
 		} catch (TextureException e) {
 			e.printStackTrace();
 		}
-		pBack_1.setMaterial(mBack_1);
-		pBack_1.setPosition(0f, 0f, 1f);
-		pBack_1.setTransparent(true);
+		pPit_1.setMaterial(mPit_1);
+		pPit_1.setPosition(0f, 0f, 1f);
+		pPit_1.setTransparent(true);
 
-		initPlane(pBack_1, bBack_1.getWidth(), bBack_1.getHeight());
-		addChild(pBack_1);*/
+		initPlane(pPit_1, bPit_1.getWidth(), bPit_1.getHeight());
+		addChild(pPit_1);
 
-		pLaser = new Plane(1f, 1f, 1, 1);
-		pLaser.setRotY(180);
+		pPit_2 = new Plane(1f, 1f, 1, 1);
+		pPit_2.setRotY(180);
 
-		mLaser = new Material();
+		pPit_2.setTransparent(true);
 
-		mLaser.setColorInfluence(0);
+		mPit_2 = new Material();
 
-		if (bLaser == null) {
-			bLaser = new Texture("bLaser", R.drawable.laser_01);
+		mPit_2.setColorInfluence(0);
+		bPit_2 = BitmapFactory.decodeResource(mContext.getResources(),
+				R.raw.pit_1_overlay);
+		tPit_2 = new Texture("bPit_2", bPit_2);
+		try {
+			mPit_2.addTexture(tPit_2);
+
+		} catch (TextureException e) {
+			e.printStackTrace();
 		}
-		mTextureManager.addTexture(bLaser);
+		pPit_2.setMaterial(mPit_2);
+		pPit_2.setPosition(0f, 0f, 1f);
+		pPit_2.setTransparent(true);
 
-		pLaser.setMaterial(mLaser);
-		pLaser.setPosition(0f, 0f, 0.1f);
-		pLaser.setTransparent(true);
-
-		initPlane(pLaser, bLaser.getWidth(), bLaser.getHeight());
-		addChild(pLaser);
+		initPlane(pPit_2, bPit_2.getWidth(), bPit_2.getHeight());
+		addChild(pPit_2);
 	}
 
 	public void initVideo() {
@@ -277,13 +250,7 @@ public class Renderer extends RajawaliRenderer implements
 		}
 	}
 
-	public void initVideo1() {
-		if (mMediaPlayer1 != null) {
-			initMedia1();
-		}
-	}
-
-	private void initMedia() {
+	public void initMedia() {
 		Uri uri = Uri.parse("");
 		if (preferences != null) {
 			uri = Uri.parse(preferences.getString("uri", ""));
@@ -333,56 +300,6 @@ public class Renderer extends RajawaliRenderer implements
 				// mTextureManager.replaceTexture(mVideoTexture);
 			}
 			mInit = false;
-
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	private void initMedia1() {
-		if (mInit1 == false) {
-			if (mMediaPlayer1.isPlaying()) {
-				mMediaPlayer1.pause();
-			}
-			if (!mMediaPlayer1.isPlaying()) {
-				mMediaPlayer1.stop();
-				mMediaPlayer1.reset();
-			}
-		}
-		try {
-
-			String fileName = "android.resource://"
-					+ getContext().getPackageName() + "/" + R.raw.pit_1;
-
-			if (Globals.id_1 == 1) {
-				fileName = "android.resource://"
-						+ getContext().getPackageName() + "/" + R.raw.pit_1;
-			} else if (Globals.id_1 == 2) {
-				fileName = "android.resource://"
-						+ getContext().getPackageName() + "/" + R.raw.pit_2;
-			}
-
-			mMediaPlayer1.setDataSource(getContext(), Uri.parse(fileName));
-
-			mMediaPlayer1.setLooping(true);
-			mMediaPlayer1.prepare();
-			mMediaPlayer1.seekTo(0);
-			mMediaPlayer1.start();
-			if (mInit1) {
-			} else {
-				// mTextureManager.replaceTexture(mVideoTexture1);
-			}
-			mInit1 = false;
 
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
@@ -480,12 +397,22 @@ public class Renderer extends RajawaliRenderer implements
 			mVideoTexture.update();
 		}
 
-		if (mMediaPlayer1.isPlaying()) {
-			mVideoTexture1.update();
-		}
+		pLaser.setVisible(false);
 
-		pHUD_2.setVisible(false);
+		c++;
+		{
+			if (c > 30) {
+				if (pPit_2.isVisible()) {
+					pPit_2.setVisible(false);
+				} else {
+					pPit_2.setVisible(true);
+				}
+				c = 0;
+			}
+		}
 	}
+
+	int c = 0;
 
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -493,32 +420,105 @@ public class Renderer extends RajawaliRenderer implements
 
 	}
 
+	int i = 1;
+
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
 		super.onSurfaceChanged(gl, width, height);
 
 		initPlane(pVideo, mMediaPlayer.getVideoWidth(),
 				mMediaPlayer.getVideoHeight());
-		initPlane(pVideo1, mMediaPlayer1.getVideoWidth(),
-				mMediaPlayer1.getVideoHeight());
 
 		initVideo();
-		initVideo1();
 
-		int fileName = R.raw.pit_2_vid_alpha;
-		if (Globals.id_1 == 1) {
-			fileName = R.raw.pit_1_vid_alpha;
-		} else if (Globals.id_1 == 2) {
-			fileName = R.raw.pit_2_vid_alpha;
-		}
-		try {
-			mVideo1.removeTexture(a);
-			mVideo1.addTexture(a);
-		} catch (TextureException e) {
-			e.printStackTrace();
-		}
+		if (i != Globals.id_1) {
+			// mTextureManager.reset();
+			if (Globals.id_1 == 1) {
+				//Pit Layer 1
+				mPit_1.removeTexture(tPit_1);
+				bPit_1 = BitmapFactory.decodeResource(mContext.getResources(),
+						R.raw.pit_1_base);
+				tPit_1 = new Texture("bPit_1", bPit_1);
+				try {
+					mPit_1.addTexture(tPit_1);
+				} catch (TextureException e) {
+					e.printStackTrace();
+				}
 
-		// mTextureManager.reset();
+				//Pit Layer 2
+				mPit_2.removeTexture(tPit_2);
+				bPit_2 = BitmapFactory.decodeResource(mContext.getResources(),
+						R.raw.pit_1_overlay);
+				tPit_2 = new Texture("bPit_2", bPit_2);
+				try {
+					mPit_2.addTexture(tPit_2);
+				} catch (TextureException e) {
+					e.printStackTrace();
+				}
+				
+				//CrossHair
+				mCross_1.removeTexture(tCross_1);
+				bCross_1 = BitmapFactory.decodeResource(mContext.getResources(),
+						R.drawable.hair_01);
+				tCross_1 = new Texture("bCross_1", bCross_1);
+				try {
+					mCross_1.addTexture(tCross_1);
+				} catch (TextureException e) {
+					e.printStackTrace();
+				}
+				
+				//Laser
+				mLaser.removeTexture(tLaser);
+				tLaser = new Texture("bLaser", R.drawable.laser_01);
+				try {
+					mLaser.addTexture(tLaser);
+				} catch (TextureException e) {
+					e.printStackTrace();
+				}
+			} else if (Globals.id_1 == 2) {
+				mPit_1.removeTexture(tPit_1);
+				bPit_1 = BitmapFactory.decodeResource(mContext.getResources(),
+						R.raw.pit_3_base);
+				tPit_1 = new Texture("bPit_1", bPit_1);
+				try {
+					mPit_1.addTexture(tPit_1);
+				} catch (TextureException e) {
+					e.printStackTrace();
+				}
+
+				mPit_2.removeTexture(tPit_2);
+				bPit_2 = BitmapFactory.decodeResource(mContext.getResources(),
+						R.raw.pit_3_overlay);
+				tPit_2 = new Texture("bPit_2", bPit_2);
+				try {
+					mPit_2.addTexture(tPit_2);
+				} catch (TextureException e) {
+					e.printStackTrace();
+				}
+				
+				//CrossHair
+				mCross_1.removeTexture(tCross_1);
+				bCross_1 = BitmapFactory.decodeResource(mContext.getResources(),
+						R.drawable.hair_02);
+				tCross_1 = new Texture("bCross_1", bCross_1);
+				try {
+					mCross_1.addTexture(tCross_1);
+				} catch (TextureException e) {
+					e.printStackTrace();
+				}
+				
+				//Laser
+				mLaser.removeTexture(tLaser);
+				tLaser = new Texture("bLaser", R.drawable.laser_02);
+				try {
+					mLaser.addTexture(tLaser);
+				} catch (TextureException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		i = Globals.id_1;
+
 	}
 
 	@Override
@@ -529,25 +529,21 @@ public class Renderer extends RajawaliRenderer implements
 				if (mMediaPlayer.isPlaying()) {
 					mMediaPlayer.pause();
 				}
+									mSensorManager.unregisterListener(this);
+					
 			}
+			
+			
 		} else if (mMediaPlayer != null && mInit == false) {
 			mMediaPlayer.start();
 		}
 
-		if (!visible) {
-			if (mMediaPlayer1 != null) {
-				if (mMediaPlayer1.isPlaying()) {
-					mMediaPlayer1.pause();
-				}
-			}
-		} else if (mMediaPlayer1 != null && mInit1 == false) {
-			mMediaPlayer1.start();
-		}
-/*
-		if (visible && mTextureManager != null) {
-			mTextureManager.reset();
-		}*/
+		/*
+				if (visible && mTextureManager != null) {
+					mTextureManager.reset();
+				}*/
 	}
+
 
 	@Override
 	public void onSurfaceDestroyed() {
@@ -559,19 +555,6 @@ public class Renderer extends RajawaliRenderer implements
 		mTextureManager.taskRemove(mVideoTexture);
 		mMaterialManager.taskRemove(mVideo);
 
-		if (mMediaPlayer1 != null) {
-			mMediaPlayer1.release();
-			mMediaPlayer1 = null;
-		}
-		mVideo1.removeTexture(mVideoTexture1);
-		mTextureManager.taskRemove(mVideoTexture1);
-		mMaterialManager.taskRemove(mVideo1);
-
-		mMaterialManager.taskRemove(mHUD_1);
-		mMaterialManager.taskRemove(mHUD_2);
-		mMaterialManager.taskRemove( mHUD_3);
-		mMaterialManager.taskRemove(mLaser);
-		
 		super.onSurfaceDestroyed();
 	}
 
@@ -593,22 +576,35 @@ public class Renderer extends RajawaliRenderer implements
 			mAccVals.y = (float) (event.values[0] * FILTERING_FACTOR + mAccVals.y
 					* (1.0 - FILTERING_FACTOR));
 
-			// getCurrentCamera().getPosition().x = mAccVals.x * .2f;
-			// getCurrentCamera().getPosition().y = mAccVals.y * .2f;
+			// getCurrentCamera().getPosition().x = mAccVals.x *
+			// FILTERING_FACTOR;
+			// getCurrentCamera().getPosition().y = mAccVals.y *
+			// FILTERING_FACTOR;
 
 			if (mAccVals.y < 5 && mAccVals.y > -5) {
-				pVideo.getPosition().x = -mAccVals.y * .2f * 0.1;
-				pVideo.getRotation().y = -mAccVals.y * .2f * 20 + 180;
+				pVideo.getPosition().x = -mAccVals.y * FILTERING_FACTOR * 0.1;
+				pVideo.getRotation().y = -mAccVals.y * FILTERING_FACTOR * 20
+						+ 180;
 
-				pVideo1.getPosition().x = -mAccVals.y * .2f * 0.1;
-				pVideo1.getRotation().y = -mAccVals.y * .2f * 20 + 180;
+				pCross_1.getPosition().x = -mAccVals.y * FILTERING_FACTOR * 0.075;
+				pCross_1.getRotation().y = +mAccVals.y * FILTERING_FACTOR * 8
+						+ 180;
 
-				pHUD_1.getPosition().x = -mAccVals.y * .2f * 0.075;
-				pHUD_1.getRotation().y = +mAccVals.y * .2f * 8 + 180;
+				pLaser.getPosition().x = -mAccVals.y * FILTERING_FACTOR * 0.075;
+				pLaser.getRotation().y = +mAccVals.y * FILTERING_FACTOR * 8
+						+ 180;
 
-				// pVideo.getPosition().x = -mAccVals.y * .2f*0.3;
+				pPit_1.getPosition().x = -mAccVals.y * FILTERING_FACTOR * 0.1;
+				pPit_1.getRotation().y = -mAccVals.y * FILTERING_FACTOR * 15
+						+ 180;
 
-				// getCurrentCamera().getLookAt().y = -mAccVals.y * .2f;
+				pPit_2.getPosition().x = -mAccVals.y * FILTERING_FACTOR * 0.1;
+				pPit_2.getRotation().y = -mAccVals.y * FILTERING_FACTOR * 15
+						+ 180;
+				// pVideo.getPosition().x = -mAccVals.y * FILTERING_FACTOR*0.3;
+
+				// getCurrentCamera().getLookAt().y = -mAccVals.y *
+				// FILTERING_FACTOR;
 			}
 		} catch (NullPointerException ex) {
 			Log.d(tag, ex.toString());
@@ -623,7 +619,7 @@ public class Renderer extends RajawaliRenderer implements
 			int yPixelOffset) {
 
 		if (pVideo != null) {
-		//	pVideo.setX((1 - mWidthPlane) * (xOffset - 0.5));
+			// pVideo.setX((1 - mWidthPlane) * (xOffset - 0.5));
 		}
 	}
 
@@ -645,8 +641,7 @@ public class Renderer extends RajawaliRenderer implements
 																// touch
 				System.out.println(me.getAction() + "  --  " + me.getX() + ", "
 						+ me.getY());
-				pHUD_2.setVisible(true);
-				pVideo1.setY(pVideo1.getY() - 0.002);
+				pLaser.setVisible(true);
 			}
 			if (me.getAction() == MotionEvent.ACTION_MOVE) { // Called
 																// repeatedly as
@@ -660,7 +655,6 @@ public class Renderer extends RajawaliRenderer implements
 															// of the touch
 				System.out.println(me.getAction() + "  --  " + me.getX() + ", "
 						+ me.getY());
-				pVideo1.setY(0);
 			}
 			try {
 				Thread.sleep(15); // Small delay to keep touch events from

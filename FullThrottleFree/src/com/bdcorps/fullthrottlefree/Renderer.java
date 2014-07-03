@@ -36,7 +36,7 @@ public class Renderer extends RajawaliRenderer implements
 		SharedPreferences.OnSharedPreferenceChangeListener, SensorEventListener {
 
 	public static final String SHARED_PREFS_NAME = "rajawalisharedprefs";
-	public SharedPreferences sp;
+	private SharedPreferences sp;
 	public MediaPlayer mMediaPlayer;
 	public VideoTexture mVideoTexture;
 	public Material mVideo;
@@ -77,7 +77,7 @@ public Plane pCross_1;
 	public float mGravity[];
 
 	public String tag = "StripedLog";
-	public float mWidthPlane;
+	private float mWidthPlane;
 
 	public enum ModeRenderer {
 		CLASSIC, LETTER_BOXED, STRETCHED
@@ -85,6 +85,9 @@ public Plane pCross_1;
 
 	public Renderer(Context context) {
 		super(context);
+
+		sp = context.getSharedPreferences(Wallpaper.SHARED_PREFS_NAME,
+				Context.MODE_PRIVATE);
 	}
 
 	@SuppressLint("NewApi")
@@ -250,7 +253,7 @@ public Plane pCross_1;
 		}
 	}
 
-	public void initMedia() {
+	private void initMedia() {
 		Uri uri = Uri.parse("");
 		if (preferences != null) {
 			uri = Uri.parse(preferences.getString("uri", ""));
@@ -529,11 +532,7 @@ public Plane pCross_1;
 				if (mMediaPlayer.isPlaying()) {
 					mMediaPlayer.pause();
 				}
-									mSensorManager.unregisterListener(this);
-					
 			}
-			
-			
 		} else if (mMediaPlayer != null && mInit == false) {
 			mMediaPlayer.start();
 		}
@@ -543,7 +542,6 @@ public Plane pCross_1;
 					mTextureManager.reset();
 				}*/
 	}
-
 
 	@Override
 	public void onSurfaceDestroyed() {

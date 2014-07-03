@@ -37,7 +37,10 @@ public class Settings extends PreferenceActivity implements
 		interstitial = new InterstitialAd(this);
 		  interstitial.setAdUnitId("ca-app-pub-1049137905806014/8891643282");
 
-		  AdRequest adRequest = new AdRequest.Builder().build();
+			AdRequest adRequest = new AdRequest.Builder()
+			.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+			.addTestDevice("410095009ef12100").build();
+			
 		  interstitial.loadAd(adRequest);
 		  interstitial.setAdListener(new AdListener() {
 		      public void onAdLoaded() {

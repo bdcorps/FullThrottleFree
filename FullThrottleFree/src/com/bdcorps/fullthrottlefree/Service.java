@@ -1,5 +1,7 @@
 package com.bdcorps.fullthrottlefree;
 
+import com.kskkbys.rate.RateThisApp;
+
 import rajawali.wallpaper.Wallpaper;
 import android.content.Context;
 

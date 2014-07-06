@@ -4,6 +4,9 @@ import java.io.IOException;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+
+import com.kskkbys.rate.RateThisApp;
+
 import rajawali.Camera2D;
 import rajawali.materials.Material;
 import rajawali.materials.textures.ATexture.TextureException;
@@ -85,7 +88,7 @@ public Plane pCross_1;
 
 	public Renderer(Context context) {
 		super(context);
-
+		
 		sp = context.getSharedPreferences(Wallpaper.SHARED_PREFS_NAME,
 				Context.MODE_PRIVATE);
 	}

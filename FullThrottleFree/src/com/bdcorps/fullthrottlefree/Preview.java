@@ -1,5 +1,7 @@
 package com.bdcorps.fullthrottlefree;
 
+import com.kskkbys.rate.RateThisApp;
+
 import android.app.Activity;
 import android.app.WallpaperManager;
 import android.content.ComponentName;
@@ -24,18 +26,21 @@ public class Preview extends Activity {
 			intent.setAction(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER);
 			String pkg = Service.class.getPackage().getName();
 			String cls = Service.class.getCanonicalName();
+		
 			intent.putExtra(WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT, new ComponentName(pkg, cls));
-		} else {
+	} else {
 			intent.setAction(WallpaperManager.ACTION_LIVE_WALLPAPER_CHOOSER);
 			Resources res = getResources();
 		}
 
 		startActivityForResult(intent, 0);
+		
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		super.onActivityResult(requestCode, resultCode, intent);
+
 		finish();
 	}
 

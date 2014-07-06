@@ -10,6 +10,8 @@ import android.preference.PreferenceManager;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
+import com.kskkbys.rate.RateThisApp;
+import com.nostra13.example.socialsharing.HomeActivity;
 
 @SuppressWarnings("deprecation")
 public class Settings extends PreferenceActivity implements
@@ -23,6 +25,10 @@ public class Settings extends PreferenceActivity implements
 	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
+
+		Intent myIntent = new Intent(Settings.this, HomeActivity.class);
+		Settings.this.startActivity(myIntent);
+		
 		getPreferenceManager().setSharedPreferencesName(
 				Wallpaper.SHARED_PREFS_NAME);
 		addPreferencesFromResource(R.xml.settings);
@@ -31,7 +37,6 @@ public class Settings extends PreferenceActivity implements
 						
 		getPreferenceManager().getSharedPreferences()
 				.registerOnSharedPreferenceChangeListener(this);
-		
 		
 		// Admob Interstitial
 		interstitial = new InterstitialAd(this);

@@ -13,7 +13,7 @@
         android:key="firKey"
         android:title="Robo Vehicle" >
    
-      <com.bdcorps.fullthrottlefree.ImagePreference2
+      <com.bdcorps.fullthrottlefree.ImagePreference4Locks
         android:key="img2_01"
         android:focusable="false"
         android:focusableInTouchMode="false"

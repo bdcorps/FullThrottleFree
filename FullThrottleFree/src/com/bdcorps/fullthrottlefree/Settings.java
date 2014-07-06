@@ -25,9 +25,6 @@ public class Settings extends PreferenceActivity implements
 	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
-
-		Intent myIntent = new Intent(Settings.this, HomeActivity.class);
-		Settings.this.startActivity(myIntent);
 		
 		getPreferenceManager().setSharedPreferencesName(
 				Wallpaper.SHARED_PREFS_NAME);

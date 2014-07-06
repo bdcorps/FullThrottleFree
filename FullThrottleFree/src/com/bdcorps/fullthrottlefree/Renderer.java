@@ -5,22 +5,18 @@ import java.io.IOException;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import com.kskkbys.rate.RateThisApp;
-
 import rajawali.Camera2D;
 import rajawali.materials.Material;
 import rajawali.materials.textures.ATexture.TextureException;
-import rajawali.materials.textures.ATexture;
-import rajawali.materials.textures.AlphaMapTexture;
 import rajawali.materials.textures.Texture;
 import rajawali.materials.textures.VideoTexture;
 import rajawali.math.vector.Vector3;
 import rajawali.primitives.Plane;
-import rajawali.primitives.ScreenQuad;
 import rajawali.renderer.RajawaliRenderer;
 import rajawali.wallpaper.Wallpaper;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -33,6 +29,8 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.Log;
 import android.view.MotionEvent;
+
+import com.nostra13.example.socialsharing.HomeActivity;
 
 @SuppressLint("NewApi")
 public class Renderer extends RajawaliRenderer implements
@@ -70,6 +68,7 @@ public Plane pCross_1;
 	public Bitmap bHUD_3;
 
 	public boolean mInit;
+	public boolean lockTheLock = false;
 
 	public final float FILTERING_FACTOR = .11f;
 
@@ -402,8 +401,8 @@ public Plane pCross_1;
 		if (mMediaPlayer.isPlaying()) {
 			mVideoTexture.update();
 		}
-
-		pLaser.setVisible(false);
+		
+			pLaser.setVisible(false);
 
 		c++;
 		{

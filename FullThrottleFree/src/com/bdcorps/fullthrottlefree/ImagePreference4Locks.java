@@ -1,6 +1,7 @@
 package com.bdcorps.fullthrottlefree;
 
 import com.kskkbys.rate.RateThisApp;
+import com.nostra13.example.socialsharing.FacebookDialog;
 import com.nostra13.example.socialsharing.HomeActivity;
 
 import android.content.Context;
@@ -71,11 +72,7 @@ private boolean lock4= true;
 			thumb_3.setImageResource(R.drawable.im_city_3_select);
 			thumb_4.setImageResource(R.drawable.im_city_4);
 		}		else if (mClickCounter == 4){
-			
-
-			Intent myIntent = new Intent(Settings.this, HomeActivity.class);
-			Settings.this.startActivity(myIntent);
-			
+					
 			thumb_1.setImageResource(R.drawable.im_city_1);
 			thumb_2.setImageResource(R.drawable.im_city_2);
 			thumb_3.setImageResource(R.drawable.im_city_3);
@@ -119,7 +116,7 @@ private boolean lock4= true;
 		int preValue= Globals.temp ;
 		if (thumb_3 != null) {
 			thumb_3.setOnClickListener(new OnClickListener() {
-				public void onClick(View v) {Log.d("StripedLog",String.valueOf(Globals.temp));
+				public void onClick(View v) {
 					RateThisApp.onStart(m);
 					RateThisApp.showRateDialogIfNeeded(m);
 					lock3= RateThisApp.lock;
@@ -144,6 +141,7 @@ private boolean lock4= true;
 
 			thumb_4.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
+				FacebookDialog.showRateDialog(m);
 					thumb_1.setImageResource(R.drawable.im_city_1);
 					thumb_2.setImageResource(R.drawable.im_city_2);
 					thumb_3.setImageResource(R.drawable.im_city_3);

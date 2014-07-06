@@ -17,42 +17,27 @@ import com.nostra13.example.socialsharing.assist.TwitterEventObserver;
 public class HomeActivity extends Activity {
 
 	private FacebookEventObserver facebookEventObserver;
-	private TwitterEventObserver twitterEventObserver;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.ac_home);
-		findViewById(R.id.button_share_facebook).setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
 				startFacebookActivity();
-			}
-		});
-		findViewById(R.id.button_share_twitter).setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				startTwitterActivity();
-			}
-		});
+			
 
 		facebookEventObserver = FacebookEventObserver.newInstance();
-		twitterEventObserver = TwitterEventObserver.newInstance();
 	}
 
 	@Override
 	public void onStart() {
 		super.onStart();
 		facebookEventObserver.registerListeners(this);
-		twitterEventObserver.registerListeners(this);
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-		facebookEventObserver.unregisterListeners();
-		twitterEventObserver.unregisterListeners();
+		facebookEventObserver.unregisterListeners();finish();
 	}
 
 	private void startFacebookActivity() {
@@ -62,12 +47,6 @@ public class HomeActivity extends Activity {
 		intent.putExtra(Extra.POST_LINK_NAME, Constants.FACEBOOK_SHARE_LINK_NAME);
 		intent.putExtra(Extra.POST_LINK_DESCRIPTION, Constants.FACEBOOK_SHARE_LINK_DESCRIPTION);
 		intent.putExtra(Extra.POST_PICTURE, Constants.FACEBOOK_SHARE_PICTURE);
-		startActivity(intent);
-	}
-
-	private void startTwitterActivity() {
-		Intent intent = new Intent(this, TwitterActivity.class);
-		intent.putExtra(Extra.POST_MESSAGE, Constants.TWITTER_SHARE_MESSAGE);
 		startActivity(intent);
 	}
 }

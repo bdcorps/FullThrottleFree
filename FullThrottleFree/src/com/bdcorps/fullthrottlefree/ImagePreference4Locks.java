@@ -34,9 +34,7 @@ private boolean lock4= true;
 	public ImagePreference4Locks(final Context context, final AttributeSet attrs,
 			final int defStyle) {
 		super(context, attrs, defStyle);
-
 		this.setLayoutResource(R.layout.imagepref4locks);
-
 	}
 
 	public ImagePreference4Locks(final Context context, final AttributeSet attrs) {
@@ -58,24 +56,28 @@ private boolean lock4= true;
 		if (mClickCounter == 1){
 			thumb_1.setImageResource(R.drawable.im_city_1_select);
 			thumb_2.setImageResource(R.drawable.im_city_2);
-			thumb_3.setImageResource(R.drawable.im_city_3);
+			if (!RateThisApp.lock3){
+			thumb_3.setImageResource(R.drawable.im_city_3);}else {	thumb_3.setImageResource(R.drawable.im_3_lock);}
 			thumb_4.setImageResource(R.drawable.im_city_4);
 		}
 		else if (mClickCounter == 2){
 			thumb_1.setImageResource(R.drawable.im_city_1);
 			thumb_2.setImageResource(R.drawable.im_city_2_select);
-			thumb_3.setImageResource(R.drawable.im_city_3);
+			if (!RateThisApp.lock3){
+			thumb_3.setImageResource(R.drawable.im_city_3);}else {	thumb_3.setImageResource(R.drawable.im_3_lock);}
 			thumb_4.setImageResource(R.drawable.im_city_4);
 		}		else if (mClickCounter == 3){
 			thumb_1.setImageResource(R.drawable.im_city_1);
 			thumb_2.setImageResource(R.drawable.im_city_2);
-			thumb_3.setImageResource(R.drawable.im_city_3_select);
+			if (!RateThisApp.lock3){
+			thumb_3.setImageResource(R.drawable.im_city_3);}else {	thumb_3.setImageResource(R.drawable.im_3_lock);}
 			thumb_4.setImageResource(R.drawable.im_city_4);
 		}		else if (mClickCounter == 4){
 					
 			thumb_1.setImageResource(R.drawable.im_city_1);
 			thumb_2.setImageResource(R.drawable.im_city_2);
-			thumb_3.setImageResource(R.drawable.im_city_3);
+			if (!RateThisApp.lock3){
+			thumb_3.setImageResource(R.drawable.im_city_3);}else {	thumb_3.setImageResource(R.drawable.im_3_lock);}
 			thumb_4.setImageResource(R.drawable.im_city_4_select);
 		}		
 		
@@ -117,9 +119,8 @@ private boolean lock4= true;
 		if (thumb_3 != null) {
 			thumb_3.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					RateThisApp.onStart(m);
-					RateThisApp.showRateDialogIfNeeded(m);
-					lock3= RateThisApp.lock;
+					RateThisApp.showRateDialog(m,thumb_3);
+					lock3= RateThisApp.lock3;
 					if (!lock3){
 					thumb_1.setImageResource(R.drawable.im_city_1);
 					thumb_2.setImageResource(R.drawable.im_city_2);
